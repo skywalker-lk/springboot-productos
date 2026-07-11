@@ -16,11 +16,25 @@ Ver [`DOCUMENTACION_CAMBIOS.md`](./DOCUMENTACION_CAMBIOS.md) para la documentaci
 
 ## Quick Start
 
-```bash
-# Desarrollo local (H2 en memoria)
-mvn spring-boot:run
+### Backend (desarrollo local)
 
-# Producción (Docker + PostgreSQL)
+```bash
+# H2 en memoria
+mvn spring-boot:run
+```
+
+### Frontend (desarrollo local)
+
+```bash
+cd frontend
+npm install
+npm run dev
+# → http://localhost:5173 (apunta al backend en :8080)
+```
+
+### Producción (Docker + PostgreSQL)
+
+```bash
 docker compose up --build
 ```
 
