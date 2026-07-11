@@ -32,6 +32,29 @@ docker compose up --build
 | Swagger UI | `http://localhost:8080/swagger-ui.html` |
 | H2 Console | `http://localhost:8080/h2-console` |
 
+## Tests
+
+**96 tests** divididos en 3 categorías:
+
+| Tipo | Cantidad | Tecnología |
+|------|----------|------------|
+| **Unitarios** (services) | 24 | JUnit 5 + Mockito |
+| **Integración** (controllers) | 35 | SpringBootTest + WebClient + H2 |
+| **Repositorio** (JPA) | 12 | DataJpaTest + H2 |
+| **Validación** (DTOs) | 16 | Bean Validation |
+| **Config** (JWT) | 4 | JUnit 5 |
+
+```bash
+# Ejecutar todos los tests
+mvn test
+
+# Solo unitarios
+mvn test -Dtest="*ServiceTest,*JwtServiceTest,ValidatorTests"
+
+# Solo integración
+mvn test -Dtest="*IntegrationTest"
+```
+
 ## Features Agregadas
 
 ✅ JWT + Spring Security con 6 roles  
