@@ -1,15 +1,37 @@
-FROM maven:3-jdk-8-alpine as builder
+# ============================================================
+# Dockerfile para springboot-productos (single-module)
+# Multi-stage: compila con Maven + JDK, corre con JDK mínimo
+# ============================================================
 
-WORKDIR /usr/src/app
+# --- Stage 1: Compilación ---
+FROM maven:3.9-eclipse-temurin-17 AS build
 
-COPY . /usr/src/app
-RUN mvn package
+WORKDIR /app
 
-FROM openjdk:8-jre-alpine
+# Copiar pom.xml primero (cache de dependencias)
+COPY pom.xml .
 
-COPY --from=builder /usr/src/app/target/*.jar /app.jar
+# Descargar dependencias (se cachea si el pom no cambia)
+RUN mvn dependency:go-offline -q
 
+# Copiar el código fuente
+COPY . .
+
+# Compilar y empaquetar (sin tests para acelerar)
+RUN mvn package -DskipTests -q
+
+# --- Stage 2: Ejecución ---
+FROM eclipse-temurin:17-jre-alpine
+
+WORKDIR /app
+
+# Copiar el JAR del stage anterior
+COPY --from=build /app/target/springboot-productos-*.jar app.jar
+
+# Puerto de la app
 EXPOSE 8080
 
-ENTRYPOINT ["java"]
-CMD ["-jar", "/app.jar"]
+# Perfil Docker (usa PostgreSQL) y arranque
+ENV SPRING_PROFILES_ACTIVE=docker
+
+ENTRYPOINT ["java", "-jar", "app.jar"]

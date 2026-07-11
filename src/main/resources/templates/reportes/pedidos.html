@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Reporte de Pedidos</title>
+    <style>
+        body { font-family: 'Helvetica', 'Arial', sans-serif; font-size: 12px; color: #333; }
+        h1 { text-align: center; color: #2c3e50; font-size: 18px; margin-bottom: 5px; }
+        .subtitulo { text-align: center; color: #7f8c8d; font-size: 11px; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background-color: #2c3e50; color: white; padding: 8px 6px; text-align: left; font-size: 11px; }
+        td { padding: 6px; border-bottom: 1px solid #ddd; font-size: 11px; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+        .derecha { text-align: right; }
+        .footer { text-align: center; color: #95a5a6; font-size: 10px; margin-top: 20px; }
+        .resumen { margin-bottom: 20px; padding: 10px; background-color: #ecf0f1; border-radius: 4px; font-size: 11px; }
+        .resumen strong { color: #2c3e50; }
+        .lineas { font-size: 10px; color: #666; }
+        .lineas td { padding: 3px 6px; }
+    </style>
+</head>
+<body>
+    <h1>Reporte de Pedidos</h1>
+    <p class="subtitulo" th:text="|Período: ${desde} al ${hasta}|">Período</p>
+
+    <div class="resumen">
+        <strong>Total de pedidos:</strong> <span th:text="${pedidos.size()}">0</span> |
+        <strong>Ingreso total:</strong> $<span th:text="${#numbers.formatDecimal(ingresoTotal, 0, 2)}">0.00</span>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Fecha</th>
+                <th>Cliente</th>
+                <th>Estado</th>
+                <th class="derecha">Total</th>
+                <th>Medio Pago</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="p : ${pedidos}">
+                <td th:text="${p.id}">1</td>
+                <td th:text="${p.fecha}">01/01/2026</td>
+                <td th:text="${p.cliente}">Cliente</td>
+                <td th:text="${p.estado}">Confirmado</td>
+                <td class="derecha" th:text="'$' + ${#numbers.formatDecimal(p.total, 0, 2)}">$0.00</td>
+                <td th:text="${p.medioPago}">Efectivo</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p class="footer">E-Commerce API - Reporte generado automáticamente</p>
+</body>
+</html>
